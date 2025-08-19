@@ -1,0 +1,252 @@
+{% load static %}
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AgentLab — Desarrolla tu Agente Inteligente</title>
+  <meta name="description" content="Home para un proyecto sobre el desarrollo de un agente inteligente: features, flujo, stack y llamado a la acción." />
+  <link rel="stylesheet" href="{% static 'css/Home.css' %}" />
+  <meta name="color-scheme" content="light dark" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="brand" aria-label="AgentLab, ir al inicio">
+        <span class="brand-mark" aria-hidden="true">◎</span>
+        <span class="brand-text">AgentLab</span>
+      </a>
+
+      <nav class="nav" aria-label="Principal">
+        <ul class="nav-links">
+          <li><a href="#overview">Chat</a></li>
+          <li><a href="#features">Características</a></li>
+          <li><a href="#workflow">Flujo</a></li>
+          <li><a href="#stack">Stack</a></li>
+          <li><a href="#demo">Demo</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <a class="btn btn--ghost" href="{% url 'LLM:upload' %}">Subir Archivo</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <h1>Construye tu <span class="grad">Agente Inteligente</span></h1>
+          <p class="lead">
+            Orquesta modelos, memoria, herramientas y evaluación en un solo flujo. Desarrolla, prueba y despliega con una base sólida y escalable.
+          </p>
+          <div class="actions">
+            <a class="btn" href="#cta">Comenzar ahora</a>
+            <a class="btn btn--ghost" href="#demo">Ver demo</a>
+          </div>
+
+          <ul class="trust">
+            <li class="badge">LangChain</li>
+            <li class="badge">Python</li>
+            <li class="badge">Django</li>
+            <li class="badge">Chroma DB</li>
+          </ul>
+        </div>
+
+        <div class="hero-card" aria-label="Vista previa de código del agente">
+<pre><code class="snippet">// Orquestación mínima
+const tools = [Search(), Retriever(), Calculator()];
+const memory = ConversationMemory({ window: 8 });
+
+const agent = Agent({
+  llm: "gpt-4o-mini",
+  tools,
+  memory,
+  policy: "react",
+});
+
+const res = await agent.run("Resume el PDF y calcula KPI");
+console.log(res.answer);</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- OVERVIEW -->
+    <section id="overview" class="section">
+      <div class="container narrow">
+        <h2>¿Qué es AgentLab?</h2>
+        <p>
+          Un espacio para diseñar agentes inteligentes de punta a punta: <strong>ingesta</strong> de conocimiento,
+          <strong>razonamiento</strong>, <strong>herramientas</strong>, <strong>memoria</strong>,
+          <strong>evaluación</strong> y <strong>despliegue</strong>. Centrado en buenas prácticas y reproducibilidad.
+        </p>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="section">
+      <div class="container">
+        <h2>Características clave</h2>
+        <div class="grid cards">
+          <article class="card">
+            <div class="icon" aria-hidden="true">🔗</div>
+            <h3>Herramientas &amp; Plugins</h3>
+            <p>Conecta buscadores, bases vectoriales, hojas de cálculo, APIs y más con control de uso y seguridad.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">🧠</div>
+            <h3>Memoria</h3>
+            <p>Memoria conversacional y de largo plazo para respuestas coherentes en sesiones extendidas.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">📚</div>
+            <h3>RAG listo</h3>
+            <p>Ingesta de PDF/HTML/Docs, chunking y recuperación semántica para grounding confiable.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">🧪</div>
+            <h3>Evaluación</h3>
+            <p>Pruebas con datasets, scoring automático y trazas para depurar razonamientos del agente.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">⚙️</div>
+            <h3>Orquestación</h3>
+            <p>Policies ReAct/Toolformer, routers, subagentes y control de errores con reintentos.</p>
+          </article>
+          <article class="card">
+            <div class="icon" aria-hidden="true">🚀</div>
+            <h3>Despliegue</h3>
+            <p>API HTTP, Webhooks y UI mínima para compartir tu demo en minutos.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORKFLOW -->
+    <section id="workflow" class="section alt">
+      <div class="container">
+        <h2>Flujo de desarrollo</h2>
+        <ol class="steps">
+          <li>
+            <span class="step-num">1</span>
+            <div>
+              <h4>Definir tareas &amp; herramientas</h4>
+              <p>Enumera capacidades y permisos del agente. Empieza simple; itera.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <div>
+              <h4>Agregar memoria &amp; RAG</h4>
+              <p>Integra contexto empresarial y memoria conversacional con controles.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <div>
+              <h4>Evaluar y ajustar</h4>
+              <p>Diseña casos, mide exactitud y costo. Observa trazas y mejora prompts/policies.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">4</span>
+            <div>
+              <h4>Desplegar</h4>
+              <p>Expose una API y agrega monitorización de calidad, latencia y gasto.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section id="stack" class="section">
+      <div class="container">
+        <h2>Stack sugerido</h2>
+        <ul class="stack">
+          <li class="badge">Python</li>
+          <li class="badge">LangChain / LangGraph</li>
+          <li class="badge">FastAPI</li>
+          <li class="badge">PostgreSQL</li>
+          <li class="badge">Vector DB (FAISS/Chroma)</li>
+          <li class="badge">S3/MinIO</li>
+          <li class="badge">Docker</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- DEMO -->
+    <section id="demo" class="section alt">
+      <div class="container demo">
+        <div class="demo-visual" role="img" aria-label="Placeholder visual de demo">
+          <div class="demo-bars">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="demo-window">
+            <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            <pre><code>// Demo (placeholder)
+Usuario: "Resume el contrato y extrae KPIs"
+Agente:  Procesando… Herramienta: Retriever
+         Herramienta: Calculator
+         Respuesta: Se detectan 5 KPIs: …</code></pre>
+          </div>
+        </div>
+        <div class="demo-copy">
+          <h2>Prueba la experiencia</h2>
+          <p>Conecta documentos, pregunta en lenguaje natural y observa cómo el agente razona con transparencia.</p>
+          <a class="btn" href="#cta">Probar ahora</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta" class="section cta">
+      <div class="container narrow">
+        <h2>¿Listo para construir?</h2>
+        <p>Empieza con una plantilla base y agrega tus herramientas. Escala conforme lo necesites.</p>
+        <a class="btn btn--full" href="#contacto">Hablar con nosotros</a>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto" class="section">
+      <div class="container">
+        <h2>Contacto</h2>
+        <form class="contact">
+          <div class="grid-2">
+            <label class="field">
+              <span>Nombre</span>
+              <input type="text" name="nombre" placeholder="Tu nombre" required />
+            </label>
+            <label class="field">
+              <span>Email</span>
+              <input type="email" name="email" placeholder="tucorreo@ejemplo.com" required />
+            </label>
+          </div>
+          <label class="field">
+            <span>Mensaje</span>
+            <textarea name="mensaje" rows="5" placeholder="Cuéntanos tu caso de uso"></textarea>
+          </label>
+          <button class="btn" type="submit">Enviar</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> AgentLab. Hecho con ♥ para construir agentes útiles.</p>
+      <ul class="footer-links">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#features">Características</a></li>
+        <li><a href="#stack">Stack</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- (Opcional) Sin JS: el año se puede fijar manualmente si no usas scripts -->
+</body>
+</html>
