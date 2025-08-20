@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ayjt*)4ivl&)nq63osv#ub9*g9t11bm%*4e8bg#%3(gb3^3a+s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'LLM',
+    'cuentas',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +136,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Auth model
+AUTH_USER_MODEL = 'cuentas.CustomUser'

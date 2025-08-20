@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Iniciar Sesión</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+  <div class="wrap">
+    <form class="card" method="POST" novalidate>
+      {% csrf_token %}
+      <h1>Bienvenido 👋</h1>
+      <p class="subtitle">Accede a tu cuenta</p>
+
+      <!-- Username -->
+      <div class="field">
+        <label for="username">Usuario</label>
+        <input id="username" name="username" type="text" placeholder="tu_usuario" required autocomplete="username">
+      </div>
+
+      <!-- Password -->
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input id="password" name="password" type="password" placeholder="********" required autocomplete="current-password">
+      </div>
+
+
+      <!-- Mensajes de error -->
+      {% if form.errors %}
+        <div class="mensaje invalido">
+          Usuario o contraseña incorrectos ❌
+        </div>
+      {% endif %}
+
+      <!-- Botón -->
+      <button class="btn-primary" type="submit">Iniciar Sesión</button>
+
+      <p class="foot">
+        ¿No tienes cuenta? <a href="{% url 'cuentas:registro' %}">Regístrate</a>
+      </p>
+    </form>
+  </div>
+</body>
+</html>
+

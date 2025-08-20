@@ -1,0 +1,135 @@
+/* kb.css */
+:root{
+  --bg:#0b0c10; --surface:#101318; --surface-2:#141922;
+  --text:#e6e8ec; --muted:#aab1bf;
+  --brand:#7c5cff; --brand-2:#00d4ff;
+  --radius:16px; --max:1200px;
+  --shadow:0 1px 0 rgba(255,255,255,.02) inset, 0 10px 30px rgba(0,0,0,.35);
+  --font: ui-sans-serif, system-ui, Segoe UI, Inter, Roboto, Arial;
+  --danger: #95142e; --danger-2: #d6173e;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#ffffff; --surface:#f6f7fb; --surface-2:#eef1f7;
+    --text:#0f1222; --muted:#566177;
+    --shadow:0 1px 0 rgba(0,0,0,.02) inset, 0 10px 30px rgba(17,29,58,.08);
+  }
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:var(--font); color:var(--text);
+  background:
+    radial-gradient(1200px 480px at 85% -10%, rgba(124,92,255,.20), transparent 60%),
+    radial-gradient(900px 380px at 10% -5%, rgba(0,212,255,.18), transparent 55%),
+    var(--bg);
+  line-height:1.6;
+}
+.container{width:100%; max-width:var(--max); margin-inline:auto; padding-inline:20px}
+.narrow{max-width:800px; margin-inline:auto}
+.section{padding:64px 0}
+.section.alt{background: linear-gradient(to bottom, transparent, rgba(0,0,0,.04))}
+
+/* Header */
+.site-header{
+  position:sticky; top:0; z-index:20;
+  backdrop-filter:saturate(1.3) blur(8px);
+  background: color-mix(in srgb, var(--surface), transparent 28%);
+  border-bottom:1px solid color-mix(in srgb, var(--text), transparent 90%);
+}
+.header-inner{display:flex; align-items:center; justify-content:space-between; gap:12px; padding-block:14px}
+.brand{display:flex; align-items:center; gap:10px; color:var(--text); text-decoration:none; font-weight:800}
+.brand-mark{display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,var(--brand),var(--brand-2)); box-shadow:var(--shadow); font-size:16px}
+.nav a{color:var(--muted); text-decoration:none; font-weight:700; margin-left:14px}
+.nav a:hover{color:var(--text)}
+
+/* Hero */
+.hero h1{font-size: clamp(28px, 4vw, 42px); line-height:1.15; margin:0 0 8px}
+.grad{background:linear-gradient(135deg,var(--brand),var(--brand-2)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.lead{color:var(--muted); margin:0}
+
+/* Grid y tarjetas */
+.grid-3{display:grid; gap:16px; grid-template-columns: repeat(3, 1fr)}
+@media (max-width: 1024px){ .grid-3{grid-template-columns: repeat(2, 1fr)} }
+@media (max-width: 720px){ .grid-3{grid-template-columns: 1fr} }
+
+.card{
+  background: var(--surface);
+  border:1px solid color-mix(in srgb, var(--text), transparent 88%);
+  border-radius: var(--radius);
+  padding:18px; box-shadow: var(--shadow);
+}
+.card-head{display:flex; align-items:center; gap:10px; margin-bottom:8px}
+.icon{font-size:22px; line-height:1}
+.muted{color:var(--muted); margin:0 0 10px}
+
+/* Forms */
+.stack{display:grid; gap:12px}
+.field{display:grid; gap:6px}
+.field span{font-weight:700; font-size:14px}
+input[type="text"], textarea{
+  width:100%; padding:12px 14px; border-radius:12px;
+  border:1px solid color-mix(in srgb, var(--text), transparent 86%);
+  background:var(--surface-2); color:var(--text)
+}
+input::placeholder, textarea::placeholder{color: color-mix(in srgb, var(--muted), transparent 10%)}
+input:focus-visible, textarea:focus-visible{outline:2px solid color-mix(in srgb, var(--brand), transparent 30%); outline-offset:2px}
+.hint{color:var(--muted); font-size:13px}
+
+.btn{
+  padding:12px 16px; border-radius:999px; border:1px solid transparent;
+  background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#07090f;
+  font-weight:800; letter-spacing:.2px; box-shadow:var(--shadow); cursor:pointer;
+}
+.btn:hover{opacity:.95}
+.btn:focus-visible{outline:2px solid var(--brand-2); outline-offset:2px}
+.btn--ghost{
+  background: transparent;
+  border-color: color-mix(in srgb, var(--text), transparent 80%);
+  color: var(--text);
+}
+.btn--ghost:hover{background: color-mix(in srgb, var(--text), transparent 92%)}
+
+.messages{min-height:22px}
+
+/* Separador y links */
+.sep{
+  border:0; height:1px; margin:8px 0;
+  background: color-mix(in srgb, var(--text), transparent 88%);
+}
+.mini-links{margin-top:6px}
+.mini-links a{color:var(--muted); text-decoration:none; font-weight:700}
+.mini-links a:hover{color:var(--text)}
+
+/* Estado / logs */
+.log{
+  min-height:80px;
+  background: var(--surface);
+  border:1px dashed color-mix(in srgb, var(--text), transparent 85%);
+  border-radius:12px; padding:14px;
+}
+
+/* Footer */
+.site-footer{border-top:1px solid color-mix(in srgb, var(--text), transparent 90%); padding:20px 0}
+.footer-inner{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.footer-links{list-style:none; display:flex; gap:12px; padding:0; margin:0}
+.footer-links a{color:var(--muted); text-decoration:none}
+.footer-links a:hover{color:var(--text)}
+
+/* A11y */
+a:focus-visible{outline:2px solid var(--brand-2); outline-offset:2px}
+@media (prefers-reduced-motion: reduce){ *{animation:none; transition:none} }
+
+.btn{
+  display:inline-block; text-decoration:none; border:1px solid transparent;
+  padding:10px 16px; border-radius:999px; background:linear-gradient(135deg,var(--brand),var(--brand-2));
+  color:#07090f; font-weight:800; letter-spacing:.2px; box-shadow: var(--shadow);
+}
+.btn:hover{opacity:.95}
+
+.btn--ghost{
+  background: transparent;
+  border-color: color-mix(in srgb, var(--danger-2), transparent 80%);
+  color: var(--text);
+}
+.btn--ghost:hover{background: color-mix(in srgb, var(--danger), transparent 50%)}

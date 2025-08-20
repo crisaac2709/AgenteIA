@@ -1,0 +1,104 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro de Usuario</title>
+  <link rel="stylesheet" href="{% static 'css/registro.css' %}">
+</head>
+<body>
+  <div class="wrap">
+    <form class="card" method="POST" id="form" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      <h1>Crear cuenta</h1>
+      <p class="subtitle">Únete para probar tu agente inteligente ✨</p>
+
+      <!-- Username -->
+      <div class="field">
+        <label for="username">Usuario <span>*</span></label>
+        <input id="username" name="username" type="text" placeholder="tu_usuario" required maxlength="150" autocomplete="username">
+        <p class="mensaje"></p>
+      </div>
+
+      <!-- First / Last name -->
+      <div class="grid-2">
+        <div class="field">
+          <label for="first_name">Nombres</label>
+          <input id="first_name" name="first_name" type="text" placeholder="Juan" maxlength="150" autocomplete="given-name">
+          <p class="mensaje"></p>
+        </div>
+        <div class="field">
+          <label for="last_name">Apellidos</label>
+          <input id="last_name" name="last_name" type="text" placeholder="Pérez" maxlength="150" autocomplete="family-name">
+          <p class="mensaje"></p>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="field">
+        <label for="email">Correo <span>*</span></label>
+        <input id="email" name="email" type="email" placeholder="correo@dominio.com" required autocomplete="email">
+        <p class="mensaje"></p>
+      </div>
+
+      <!-- Password -->
+      <div class="field">
+        <label for="password1">Contraseña <span>*</span></label>
+        <input id="password1" name="password1" type="password" placeholder="Mín. 8 caracteres" required autocomplete="new-password" minlength="8">
+        <p class="mensaje"></p>
+      </div>
+
+      <div class="field">
+        <label for="password2">Repetir contraseña <span>*</span></label>
+        <input id="password2" name="password2" type="password" placeholder="Mín. 8 caracteres" required autocomplete="new-password" minlength="8">
+        <p class="mensaje"></p>
+      </div>
+
+      <!-- Teléfono -->
+      <div class="field">
+        <label for="telefono">Teléfono</label>
+        <input id="telefono" name="telefono" type="text" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="0999999999" autocomplete="tel">
+        <small class="hint">10 dígitos, solo números.</small>
+        <p class="mensaje"></p>
+      </div>
+
+      <!-- Fecha de nacimiento -->
+      <div class="field">
+        <label for="fecha_nacimiento">Fecha de nacimiento</label>
+        <input id="fecha_nacimiento" name="fecha_nacimiento" type="date" max="2099-12-31">
+        <p class="mensaje"></p>
+      </div>
+
+      <!-- Foto -->
+      <div class="field">
+        <label for="foto">Foto (opcional)</label>
+        <input id="foto" name="foto" type="file" accept="image/*">
+        <div class="preview" id="preview"></div>
+      </div>
+
+      <!-- Términos -->
+      <label class="check">
+        <input type="checkbox" required>
+        <span>Acepto los términos y condiciones</span>
+      </label>
+
+      <button class="btn-primary" type="submit">Crear cuenta</button>
+
+      <p class="foot">
+        ¿Ya tienes cuenta? <a href="{% url 'cuentas:login' %}">Inicia sesión</a>
+      </p>
+    </form>
+  </div>
+
+  <script>
+    window.URLS = {
+        api_registro: "{% url 'cuentas:api_registro' %}"
+    }
+  </script>
+  <script src="{% static 'js/validaciones.js'  %}"></script>
+  <script src="{% static 'js/registro.js'  %}"></script>
+  
+</body>
+</html>

@@ -23,7 +23,9 @@ from langchain.document_loaders import TextLoader
 from langchain.text_splitter import CharacterTextSplitter
 
 #Utilitario para usar el modelo de OpenAI para que le de representación numérica a nuestros textos
-from langchain.embeddings import OpenAIEmbeddings, HuggingFaceEmbeddings
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.embeddings import HuggingFaceEmbeddings
+
 
 #Utilitario para vectorizar sobre Chroma
 from langchain.vectorstores import Chroma
@@ -64,7 +66,7 @@ def obtenerLlm():
 # Obtener modelo para hacer embeddings
 def obtenerLlmEmbedding():
     llmEmbedding = HuggingFaceEmbeddings(
-        model = 'model_name = "all-MiniLM-L6-v2"'
+        model_name="all-MiniLM-L6-v2"
     )
     
     return llmEmbedding
@@ -119,7 +121,7 @@ def extraerTextoDePDF(rutaDePDF, rutaDeTxt):
             texto = texto + textoDePagina + " "
             
     # Abrimos el archivo txt en modo escritura con el encoding UTF-8
-    with open(rutaDeTxt, 'r', encoding='utf-8') as archivo:
+    with open(rutaDeTxt, 'w', encoding='utf-8') as archivo:
         #Escribimos el texto en el archivo
         archivo.write(texto)
         
@@ -183,7 +185,10 @@ def extraerTextosDePdfConOCR(rutaDePdf, rutaDeTxt, rutaDeImagenes, llm):
     
 #Crea una base de conocimiento con una colección
 def crearBaseDeConocimiento(ruta, coleccion):
-
+  
+  if os.path.exists(ruta):
+    shutil.rmtree(ruta)
+    
   #Creamos una base de conocimiento y obtenemos el cliente conectado a ella
   cliente = chromadb.PersistentClient(
     path = ruta

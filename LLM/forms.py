@@ -9,11 +9,12 @@ class SubirPDFForm(forms.Form):
     def clean_archivo(self):
         f = self.cleaned_data['archivo']
         tamaño = 25
+        extensiones = ('.pdf', '.txt')
         
         # Validar extension
         extension = os.path.splitext(f.name)[1].lower()
-        if extension != '.pdf':
-            raise ValidationError('Solo se permiten archivos .pdf')
+        if extension not in extensiones:
+            raise ValidationError(f'Solo se permiten archivos {[extension for extension in extensiones]}')
         
         # Validar tamaño
         if f.size > tamaño * 1024 * 1024:

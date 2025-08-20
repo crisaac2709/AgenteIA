@@ -4,6 +4,8 @@
   const messages = document.getElementById('messages');
   const resultado = document.getElementById('resultado');
 
+  year.textContent = anioActual
+
   // URL entregada por el template
   const url = window.URLS?.subir_pdf_ajax;
 
@@ -71,7 +73,7 @@
       messages.textContent = '¡Subido!';
       resultado.innerHTML = `
         <p><b>${payload.titulo}</b> subido correctamente.</p>
-        <p><a href="${payload.url}" target="_blank" rel="noopener">Abrir PDF</a></p>
+        <p><a href="${payload.url}" target="_blank" rel="noopener">Abrir archivo</a></p>
         <embed src="${payload.url}" type="application/pdf" width="100%" height="400">
       `;
       form.reset();

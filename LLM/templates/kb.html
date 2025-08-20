@@ -1,0 +1,146 @@
+{%load static%}
+
+<!-- kb.html -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>AgentLab — Base de Conocimiento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="Panel para definir contexto del modelo, crear colección y cargar documentos a la base de conocimiento." />
+  <link rel="stylesheet" href="{% static 'css/kb.css' %}" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand" aria-label="AgentLab, ir al inicio">
+        <span class="brand-mark" aria-hidden="true">◎</span>
+        <span class="brand-text">AgentLab</span>
+      </a>
+      <nav class="nav">
+        <a href="{% url 'LLM:Home' %}">Home</a>
+        <a href="{% url 'LLM:upload' %}">Subir PDF</a>
+        <a href="{% url 'cuentas:logout' %}" class="btn btn--ghost">Cerrar Sesion</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section hero">
+      <div class="container">
+        <h1>Base de <span class="grad">Conocimiento</span></h1>
+        <p class="lead">Define el contexto del agente, crea una colección y lanza la ingesta de documentos. Esta página solo refleja la UI; conecta las acciones a tus endpoints.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container grid-3">
+        <!-- 1) CONTEXTO / PERSONALIDAD -->
+        <article class="card">
+          <header class="card-head">
+            <div class="icon" aria-hidden="true">🧠</div>
+            <h2>Contexto / Personalidad</h2>
+          </header>
+          <p class="muted">Especifica tono, límites, objetivos y reglas del asistente.</p>
+          <form method="POST" class="stack" aria-describedby="ctx-hint" id="form-contexto">
+            {% csrf_token %}
+            <label class="field">
+              <span>Contexto del modelo</span>
+              <textarea name="contexto" rows="10" placeholder="Ej.: Eres un asistente técnico que responde en español, tono cordial, citas fuentes, no inventas datos…" required></textarea>
+            </label>
+            <small id="ctx-hint" class="hint">Se guardará como prompt del sistema / perfil del agente.</small>
+            <button type="submit" class="btn">Guardar contexto</button>
+            <div class="messages" id="messages_contexto" aria-live="polite"></div>
+          </form>
+        </article>
+
+        <!-- 2) CREAR COLECCIÓN -->
+        <article class="card">
+          <header class="card-head">
+            <div class="icon" aria-hidden="true">📚</div>
+            <h2>Crear colección</h2>
+          </header>
+          <p class="muted">Crea la colección donde se indexarán tus documentos.</p>
+          <form method="POST" class="stack" aria-describedby="col-hint" id="form-coleccion">
+            {% csrf_token %}
+            <label class="field">
+              <span>Nombre de la colección</span>
+              <input type="text" name="coleccion" placeholder="Ej.: contratos_julio_2025" required />
+            </label>
+            <small id="col-hint" class="hint">Usa letras, números, guiones y guion_bajo. Evita espacios.</small>
+            <button type="submit" class="btn">Crear colección</button>
+            <div class="messages" id="messages_coleccion" aria-live="polite"></div>
+          </form>
+        </article>
+
+        <!-- 3) CARGAR DOCUMENTOS -->
+        <article class="card">
+          <header class="card-head">
+            <div class="icon" aria-hidden="true">⬆️</div>
+            <h2>Cargar documentos</h2>
+          </header>
+          <p class="muted">Ejecuta tu proceso de ingesta (RAG/indexación). Ya tienes el flujo de PDFs; aquí solo disparamos la acción.</p>
+
+          <!-- Opción A: disparar proceso general (sin inputs) -->
+          <form method="POST" class="stack" id="form-carga">
+            <button type="submit" class="btn">Iniciar carga de documentos a BC</button>
+            <div class="messages" id="messages_carga" aria-live="polite"></div>
+          </form>
+
+          <hr class="sep" aria-hidden="true" />
+
+          <!-- Opción B: disparar por colección específica (si tu backend lo requiere) -->
+          <form action="/kb/ingest/by-collection" method="POST" class="stack" aria-describedby="ing-hint">
+            <label class="field">
+              <span>Colección objetivo</span>
+              <input type="text" name="coleccion" placeholder="Ej.: contratos_julio_2025" />
+            </label>
+            <small id="ing-hint" class="hint">Si lo dejas vacío, el backend puede usar la última creada o una por defecto.</small>
+            <button type="submit" class="btn btn--ghost">Ingestar esta colección</button>
+            <div class="messages" aria-live="polite"></div>
+          </form>
+
+          <div class="mini-links">
+            <a href="upload.html">Subir nuevos PDF</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Estado / logs (opcional: tu backend puede inyectar aquí texto) -->
+    <section class="section alt">
+      <div class="container narrow">
+        <h2>Estado</h2>
+        <div class="log" role="region" aria-live="polite" aria-label="Eventos del sistema">
+          <!-- El servidor puede renderizar aquí el feedback: -->
+          <!-- <p>[12:33] Colección creada: contratos_julio_2025</p> -->
+          <!-- <p>[12:34] Ingesta iniciada (4 archivos)…</p> -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2025 AgentLab</p>
+      <ul class="footer-links">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="upload.html">Subir PDF</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    window.URLS = {
+        url_coleccion: "{% url 'LLM:crear_coleccion' %}",
+        url_contexto: "{% url 'LLM:guardar_contexto' %}",
+        url_cargar_documentos: "{% url 'LLM:cargar_documentos' %}"
+    }
+   </script>
+   <script src="{% static 'js/crear_bc.js' %}"></script>
+   <script src="{% static 'js/guardarContexto.js' %}"></script>
+   <script src="{% static 'js/cargar_documentos.js' %}"></script>
+
+</body>
+</html>

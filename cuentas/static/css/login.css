@@ -1,0 +1,114 @@
+:root{
+  --bg: #0b0b0f;
+  --panel: #121219;
+  --muted: #9aa0a6;
+  --text: #e6e6e6;
+  --gold: #7c5cff;
+  --gold-2: #00d4ff;
+  --ring: rgba(78, 19, 206, 0.35);
+}
+
+*{ box-sizing: border-box; }
+html,body{ height:100%; margin:0; }
+body{
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  background: radial-gradient(1200px 800px at 80% -10%, #1b1b27 0%, var(--bg) 60%);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.card{
+  width: 100%;
+  max-width: 420px;
+  background: var(--panel);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  padding: 2rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+  backdrop-filter: blur(6px);
+  position: relative;
+}
+
+.foot a{
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--gold-2);
+}
+
+.card::after{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:18px;
+  padding:1px;
+  background: linear-gradient(135deg, var(--gold), rgba(255,255,255,0) 35%, var(--gold-2) 70%, rgba(255,255,255,0));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events:none;
+}
+
+h1{
+  margin:0 0 .25rem;
+  font-weight:700;
+}
+.subtitle{ margin:0 0 1.25rem; color:var(--muted); font-size:.95rem; }
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:.5rem;
+  margin-bottom:1rem;
+}
+label{ font-size:.95rem; color:#dcdcdc; }
+input{
+  width:100%;
+  background:#0f0f16;
+  border:1px solid #232334;
+  border-radius:12px;
+  padding:.9rem 1rem;
+  color:var(--text);
+  outline:none;
+  transition:border .2s, box-shadow .2s;
+}
+input:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 6px var(--ring);
+}
+
+.check{
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  margin:.5rem 0 1.25rem;
+  color:var(--muted);
+  font-size:.9rem;
+}
+.check input{ accent-color: var(--gold); }
+
+.btn-primary{
+  width:100%;
+  background:linear-gradient(180deg, var(--gold), var(--gold-2));
+  border:none;
+  color:#0e0e12;
+  font-weight:700;
+  letter-spacing:.3px;
+  padding:1rem 1.2rem;
+  border-radius:14px;
+  cursor:pointer;
+  transition:transform .06s ease, filter .2s ease;
+}
+.btn-primary:hover{ filter:brightness(1.05); }
+.btn-primary:active{ transform:translateY(1px); }
+
+.mensaje{
+  font-size:.9rem;
+  margin-bottom:1rem;
+  padding:.6rem 1rem;
+  border-radius:10px;
+}
+.mensaje.invalido{
+  background:#2a1b1b;
+  border:1px sol

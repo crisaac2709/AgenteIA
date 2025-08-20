@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light dark" />
   <link rel="stylesheet" href="{% static 'css/upload.css' %}" />
-  <meta name="description" content="Página para cargar archivos PDF con estilo moderno y accesible." />
+  <meta name="description" content="Página para cargar archivos PDF o TXT con estilo moderno y accesible." />
 </head>
 <body>
   <header class="site-header">
@@ -19,7 +19,7 @@
         <span class="brand-text">AgentLab</span>
       </a>
       <nav class="nav">
-        <a href="{% url 'LLM:Home' %}">Cargar</a>
+        <!--<a href="{% url 'LLM:Home' %}">Cargar</a>-->
         <a href="{% url 'LLM:Home' %}">Volver al Home</a>
       </nav>
     </div>
@@ -28,8 +28,8 @@
   <main>
     <section class="section">
       <div class="container narrow">
-        <h1>Sube tu <span class="grad">archivo PDF</span></h1>
-        <p class="lead">Aceptamos únicamente documentos en formato PDF. Tamaño sugerido: hasta 25&nbsp;MB.</p>
+        <h1>Sube tu <span class="grad">archivo PDF o TXT</span></h1>
+        <p class="lead">Aceptamos únicamente documentos en formato PDF y TXT. Tamaño sugerido: hasta 25&nbsp;MB.</p>
 
         <form class="upload" method="POST" enctype="multipart/form-data" id="form-pdf">
             {% csrf_token %} 
@@ -38,17 +38,17 @@
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 3l4 4h-3v5h-2V7H8l4-4zm-6 9h2v7h12v-7h2v9H6v-9z"/>
             </svg>
-            <p class="dz-title">Arrastra y suelta tu PDF aquí<br><span>o haz clic para seleccionarlo</span></p>
+            <p class="dz-title">Arrastra y suelta tu archivo aquí<br><span>o haz clic para seleccionarlo</span></p>
             <input
               class="file-input"
               type="file"
               name="archivo"
               id="archivo"
-              accept="application/pdf,.pdf"
+              accept="application/pdf,.pdf, text/plane,.txt"
               required
-              aria-label="Seleccionar archivo PDF"
+              aria-label="Seleccionar archivo PDF o TXT"
             />
-            <small id="hint" class="hint">Solo PDF. Se verificará el tipo también en el servidor.</small>
+            <small id="hint" class="hint">Solo PDF o TXT. Se verificará el tipo también en el servidor.</small>
           </div>
 
           <label class="field">
@@ -56,7 +56,7 @@
             <input type="text" name="titulo" placeholder="Ej.: Términos del contrato" />
           </label>
 
-          <button type="submit" class="btn">Subir PDF</button>
+          <button type="submit" class="btn">Subir archivo</button>
 
           <!-- Área de mensajes (el backend puede devolver feedback aquí) -->
           <div class="messages" aria-live="polite" id="messages"></div>
@@ -87,6 +87,15 @@
     window.URLS = {
         subir_pdf_ajax: "{% url 'LLM:subir_pdf_ajax' %}"
     }
+   </script>
+
+   <script>
+    const year = document.getElementById('year')
+    const hoy = new Date()
+    const anioActual = hoy.getFullYear()
+
+    year.textContent = anioActual
+
    </script>
   <script src="{% static 'js/subirPDF.js' %}"></script>
 </body>
