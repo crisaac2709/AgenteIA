@@ -1,0 +1,130 @@
+{% load static %}
+
+<!-- chat.html -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>AgentLab — Chat con tu Base de Conocimiento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="Chat con el agente y acción para obtener la base de conocimiento." />
+  <link rel="stylesheet" href="{% static 'css/chat.css' %}" />
+</head>
+<body>
+  <!-- Header con botón superior -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="{% url 'LLM:Home' %}" class="brand" aria-label="AgentLab, ir al inicio">
+        <span class="brand-mark" aria-hidden="true">◎</span>
+        <span class="brand-text">AgentLab</span>
+      </a>
+
+      <nav class="nav">
+        <a href="{% url 'LLM:kb' %}">Base de conocimiento</a>
+        <a href="{% url 'LLM:upload' %}">Subir archivos</a>
+      </nav>
+
+      <!-- Botón superior solicitado -->
+      <form method="post" class="inline-form" id="form-bc">
+        {% csrf_token %} 
+        <button class="btn" type="submit">Obtener base de conocimiento</button>
+        <div id="messages_bc"></div>
+      </form>
+    </div>
+  </header>
+
+  <main>
+    <!-- Sección de chat -->
+    <section class="section">
+      <div class="container">
+        <h1>Chat con tu <span class="grad">Agente</span></h1>
+        <p class="lead">Consulta a tu agente y aprovecha el conocimiento indexado.</p>
+
+        <div class="chat-panel">
+          <!-- Historial de mensajes -->
+          <div class="chat-messages" role="log" aria-live="polite" aria-label="Mensajes del chat">
+            <!-- Mensajes de ejemplo (puedes renderizar los reales del backend) -->
+            <div class="msg from-agent">
+              <div class="avatar" aria-hidden="true">🤖</div>
+              <div class="bubble">
+                <p>¡Hola! Tengo acceso a tu base de conocimiento. ¿En qué te ayudo?</p>
+                <span class="meta">Agente · ahora</span>
+              </div>
+            </div>
+
+            <div class="msg from-user">
+              <div class="avatar" aria-hidden="true">🧑</div>
+              <div class="bubble">
+                <p>Resúmeme el contrato y extrae sus KPIs clave.</p>
+                <span class="meta">Tú · ahora</span>
+              </div>
+            </div>
+
+            <div class="msg from-agent">
+              <div class="avatar" aria-hidden="true">🤖</div>
+              <div class="bubble">
+                <p>Procesando… consulto documentos y calculo métricas.</p>
+                <div class="typing">
+                  <i></i><i></i><i></i>
+                </div>
+                <span class="meta">Agente · escribiendo…</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Input del chat -->
+          <form class="chat-input" method="post" id="form-chat">
+            {% csrf_token %} 
+            <label class="visually-hidden" for="prompt">Mensaje</label>
+            <textarea id="prompt" name="mensaje" rows="2" placeholder="Escribe tu mensaje..."></textarea>
+            <div class="actions">
+              <button class="btn" type="submit">Enviar</button>
+              <button class="btn btn--ghost" type="reset">Limpiar</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Tips (opcional) -->
+        <details class="tips">
+          <summary>Cómo se conecta</summary>
+          <ul>
+            <li>El botón superior hace POST a <code>/kb/obtener</code> (ajústalo a tu ruta real).</li>
+            <li>El chat envía a <code>/chat</code> el campo <code>mensaje</code>.</li>
+            <li>Renderiza el historial en <code>.chat-messages</code> desde tu backend.</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p id="p-year">© AgentLab</p>
+      <ul class="footer-links">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="kb.html">Base de conocimiento</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script> 
+    const hoy = new Date()
+    const year = hoy.getFullYear()
+    const p_year = document.getElementById('p-year')
+
+    p_year.textContent = `© ${year} AgentLab`
+  </script>
+
+  <script>
+    window.URLS = {
+        url_base_conocimiento: "{% url 'LLM:obtener_base_conocimiento' %}",
+        url_chat: "{% url 'LLM:chat_api' %}"
+    }
+   </script>
+
+   <script src="{%static 'js/obtenerBaseConocimiento.js'%}"></script>
+   <script src="{%static 'js/chat.js'%}"></script>
+
+</body>
+</html>

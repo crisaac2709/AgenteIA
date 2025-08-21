@@ -6,9 +6,9 @@ import datetime, os
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from .utils import extraerTextoDePDF, cargarDocumentosEnBaseDeConocimiento
-from .utils import obtenerLlm, obtenerLlmEmbedding
+from .utils import enviarMensajeAlChat
 from pathlib import Path
-
+from .kb_cache import LLM_EMBEDDING, get_retriever, LLM, get_chat_chain
 
 # Create your views here.
 def Home(request):
@@ -102,11 +102,12 @@ def guardarContexto(request):
     
 @require_POST
 def llenar_base_conocimiento(request):
-    llm_embedding = obtenerLlmEmbedding()
     username = request.user.username
+    print(username)
 
     # Usa Path en TODO y NO reutilices la variable base
     pdf_dir = Path("media") / username / "documentos" / "pdf"
+    print(pdf_dir)
     txt_dir = Path("media") / username / "documentos" / "txt" / "extracciones"
     kb_dir  = Path("BaseConocimiento") / username
 
@@ -117,7 +118,7 @@ def llenar_base_conocimiento(request):
     coleccion = (request.POST.get('coleccion') or "").strip()
     if not coleccion:
         return JsonResponse({'ok': False, 'errors': 'Falta coleccion'}, status=400)
-    if llm_embedding is None:
+    if LLM_EMBEDDING is None:
         return JsonResponse({'ok': False, 'errors': 'Embeddings no inicializados'}, status=500)
     if not pdf_dir.exists():
         return JsonResponse({'ok': False, 'errors': f'No existe carpeta de PDFs: {pdf_dir}'}, status=400)
@@ -140,7 +141,44 @@ def llenar_base_conocimiento(request):
         rutas_txt,
         str(kb_dir),
         coleccion,
-        llm_embedding
+        LLM_EMBEDDING
     )
     return JsonResponse({'ok': True, 'respuesta': 'Datos cargados en base de conocimiento'})
+
+
+def chat(request):
+    return render(request, 'chat.html')
+
+@require_POST
+def obtener_base_conocimiento(request):
+    try:
+        username = request.user.username
+        coleccion = (request.POST.get('coleccion') or "").strip()
         
+        if not coleccion:
+            return JsonResponse({'ok': False, 'errors': 'Falta la coleccion'}, status = 400)
+        
+        _= get_retriever(username=username, coleccion= coleccion)
+        print('todo ok')
+        return JsonResponse({'ok': True, 'mensaje': 'KB Activada'})
+    except Exception as e:
+        print(e)
+        return JsonResponse({'ok': False, 'errors': str(e)}, status = 500)
+    
+@require_POST
+def chat_api(request):
+    try:
+        user = request.user.username
+        msg  = (request.POST.get('mensaje')   or "").strip()
+        ctx  = (request.POST.get('contexto')  or "").strip()
+        col  = (request.POST.get('coleccion') or "").strip()
+        if not msg or not col:
+            return JsonResponse({'ok': False, 'errors': 'Faltan campos.'}, status=400)
+
+        retriever = get_retriever(user, col)                        
+        chat      = get_chat_chain(user, col, LLM, ctx, retriever)  
+
+        respuesta = enviarMensajeAlChat(chat, msg)
+        return JsonResponse({'ok': True, 'respuesta': respuesta})
+    except Exception as e:
+        return JsonResponse({'ok': False, 'errors': str(e)}, status=500)

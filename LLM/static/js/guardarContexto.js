@@ -32,6 +32,8 @@
             if (data.ok) {
                 mensaje.textContent = data.respuesta
 
+                localStorage.setItem('contexto', formData.get('contexto'))
+
                 setTimeout(() => {
                     mensaje.textContent = ''
                 },2000)

@@ -2,7 +2,7 @@
 from langchain_openai import ChatOpenAI
 
 #Utilitario para crear la memoria a corto plazo del modelo
-from langchain.memory import ConversationBufferMemory
+from langchain.memory import ConversationBufferMemory, ConversationTokenBufferMemory
 
 #Utilitario para usar el modelo de OpenAI para que le de representación numérica a nuestros textos
 from langchain.embeddings import OpenAIEmbeddings
@@ -57,7 +57,8 @@ def obtenerLlm():
         model = os.getenv('MODEL_NAME'),
         api_key = os.getenv('OPENAI_API_KEY'),
         base_url = os.getenv('URL'),
-        temperature = 0.2
+        temperature = 0.2,
+        max_tokens = 1000,
     )
     
     return llm
@@ -258,6 +259,7 @@ def obtenerBaseDeConocimiento(rutaDeBaseDeConocimiento, coleccion, llmEmbedding)
   return baseDeConocimiento
 
 
+"""
 #Crea una sesión de chat
 def crearSesionDeChat(llm, personalidad, baseDeConocimiento):
   #Creamos la memoria a corto plazo
@@ -277,6 +279,7 @@ def crearSesionDeChat(llm, personalidad, baseDeConocimiento):
   return chat
 
 
+
 #Envia un mensaje al chat
 def enviarMensajeAlChat(chat, mensaje):
 
@@ -285,3 +288,47 @@ def enviarMensajeAlChat(chat, mensaje):
 
   #Devolvemos la respuesta
   return respuesta["result"]
+  
+"""
+
+
+from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
+from langchain.prompts import ChatPromptTemplate
+
+QA_RULES = """Responde SOLO con lo que esté en CONTEXTO.
+Si el contexto es insuficiente, responde exactamente:
+"Fuera de alcance de la base de conocimiento"."""
+
+PROMPT = ChatPromptTemplate.from_messages([
+    ("system", "{system_prompt}"),
+    ("human", "Pregunta: {question}\n\nCONTEXTO:\n{context}\n\nRespuesta en español:")
+])
+
+def crearSesionDeChat(llm, personalidad, retriever):
+    mem = ConversationBufferMemory(
+        memory_key="chat_history",
+        return_messages=True,
+        input_key="question",   # 👈 qué campo es la entrada del usuario
+        output_key="answer"     # 👈 qué campo guardar en memoria
+    )
+
+    system_prompt = (personalidad or "") + "\n\n" + QA_RULES
+
+    chat = ConversationalRetrievalChain.from_llm(
+        llm=llm,
+        retriever=retriever,
+        chain_type="stuff",
+        combine_docs_chain_kwargs={
+            "prompt": PROMPT.partial(system_prompt=system_prompt)
+        },
+        memory=mem,
+        return_source_documents=True
+    )
+    return chat
+
+def enviarMensajeAlChat(chat, mensaje):
+    out = chat.invoke({"question": mensaje})   # 👈 usa "question"
+    if not out.get("source_documents"):
+        return "Fuera de alcance de la base de conocimiento."
+    return out.get("answer") or "Fuera de alcance de la base de conocimiento."
